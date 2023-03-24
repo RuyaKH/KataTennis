@@ -56,7 +56,7 @@ public class TennisGame
                 else
                 {
                     isPlayerWon = true;
-                    return "Server Won!";
+                    return $"{player} Won!";
                 }
             }
         }
@@ -76,7 +76,7 @@ public class TennisGame
                 else
                 {
                     isPlayerWon = true;
-                    return "Receiver Won!";
+                    return $"{player} Won!";
                 }
             }
         }
