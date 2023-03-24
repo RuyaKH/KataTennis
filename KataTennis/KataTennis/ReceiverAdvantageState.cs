@@ -20,7 +20,7 @@ public class ReceiverAdvantageState : IScoreState
             game.ReceiverScore++;
         }
     }
-    public ReceiverAdvantageState()
+    public ReceiverAdvantageState(TennisGame game)
     {
         if ((game.ReceiverScore + 1 - game.ServerScore) == 1)
             Console.WriteLine("Receiver: Advantage");

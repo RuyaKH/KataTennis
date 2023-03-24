@@ -8,6 +8,8 @@ public class TennisGame
         Receiver
     }
 
+    public Dictionary<int, string> scoreDictionary = GetDictionary();
+
     public static bool isPlayerWon = false;
     private static int serverScore;
     private static int receiverScore;
@@ -15,18 +17,37 @@ public class TennisGame
     public int ServerScore { get => serverScore; set => serverScore = value; }
     public int ReceiverScore { get => receiverScore; set => receiverScore = value; }
 
-    public static void BallWin(Player player)
+    public IScoreState NormalState {get; set;}
+    public IScoreState DeuceState {get;set;}
+    public IScoreState ReceiverMatchPointState {get;set;}
+    public IScoreState ServerMatchPointState {get;set;}
+    public IScoreState ReceiverAdvantageState {get;set;}
+    public IScoreState ServerAdvantageState {get;set;}
+    public IScoreState GameWinState {get;set;}
+    public IScoreState State {get;set;}
+
+    public TennisGame()
     {
-        if (player == Player.Server)
-        {
-            Console.WriteLine(ReturnScoreString(player, serverScore, receiverScore));
-            serverScore++;
-        }
-        else if (player == Player.Receiver)
-        {
-            Console.WriteLine(ReturnScoreString(player, serverScore, receiverScore));
-            receiverScore++;
-        }
+        NormalState = new NormalState(scoreDictionary,this,Player.Server);
+        DeuceState = new DeuceState(this,Player.Server);
+        ReceiverMatchPointState = new ReceiverMatchPointState(this);
+        ServerMatchPointState = new ServerMatchPointState(this);
+        ReceiverAdvantageState = new ReceiverAdvantageState(this);
+        ServerAdvantageState = new ServerAdvantageState(this);
+        GameWinState = new GameWinState(this, Player.Server, isPlayerWon);
+
+        State = NormalState;
+
+    }
+
+    public static Dictionary<int,string> GetDictionary()
+    {
+        Dictionary<int, string> scoreDictionary = new Dictionary<int, string>();
+        scoreDictionary.Add(0, "Love");
+        scoreDictionary.Add(1, "Fifteen");
+        scoreDictionary.Add(2, "Thirty");
+        scoreDictionary.Add(3, "Forty");
+        return scoreDictionary;
     }
 
     public static string ReturnScoreString(Player player, int score1, int score2)
@@ -34,11 +55,7 @@ public class TennisGame
         serverScore = score1;
         receiverScore = score2;
 
-        Dictionary<int, string> scoreDictionary = new Dictionary<int, string>();
-        scoreDictionary.Add(0, "Love");
-        scoreDictionary.Add(1, "Fifteen");
-        scoreDictionary.Add(2, "Thirty");
-        scoreDictionary.Add(3, "Forty");
+
 
         if (player == Player.Server)
         {
